@@ -66,7 +66,7 @@
 // import { InMemoryCache } from "apollo-cache-inmemory";
 import gql from "graphql-tag";
 import { uuid } from "vue-uuid"; // Import uuid
-
+const zeropad = (num,places) => String(num).padStart(places,0)
 const ADD_REQUEST = gql`
   mutation addRequest(
     $id: ID
@@ -194,16 +194,17 @@ export default {
       const date =
         current.getFullYear() +
         "-" +
-        (current.getMonth() + 1) +
+        zeropad((current.getMonth() + 1),2) +
         "-" +
-        current.getDate();
+        zeropad(current.getDate(),2);
       const time =
-        current.getHours() +
+        zeropad(current.getHours(),2) +
         ":" +
-        current.getMinutes() +
+        zeropad(current.getMinutes(),2) +
         ":" +
-        current.getSeconds();
-      const dateTime = date + " " + time;
+        zeropad(current.getSeconds(),2);
+        //const timeZone = current.getTimezoneOffset();
+      const dateTime = date + " " + time  ;
 
       return dateTime;
     },
@@ -215,7 +216,7 @@ export default {
       if (this.requestType === "USER-ACCESS") {
         let roleDbObj = new Object();
         roleDbObj.databaseName = this.inputFields[0].id;
-        roleDbObj.role = this.inputFields[1].id;
+        roleDbObj.roleName = this.inputFields[1].id;
         let arrayObj = [];
         arrayObj.push(roleDbObj);
         requestJSON.roles = arrayObj;
